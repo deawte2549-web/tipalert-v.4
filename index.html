@@ -376,8 +376,8 @@ select.form-input option{background:#1A1A24;}
 // ======================================================
 // ใส่ Supabase credentials ของคุณตรงนี้
 // ======================================================
-const SUPABASE_URL = 'https://okznjhisukdndkkauqsa.supabase.co'
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rem5qaGlzdWtkbmRra2F1cXNhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAyMDE3NDcsImV4cCI6MjA5NTc3Nzc0N30.IOxGrKBx2KFcXHlGPlmXa_5jmifmXhieQKKUND6mepw'
+const SUPABASE_URL = 'YOUR_SUPABASE_URL'
+const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY'
 // ======================================================
 
 const { createClient } = supabase
@@ -608,35 +608,64 @@ function triggerAlertUI(name, amount, msg) {
   }, dur)
 }
 
+function getThaiVoice() {
+  const voices = window.speechSynthesis.getVoices()
+  // หา Thai voice โดยตรงก่อน
+  const thaiVoice = voices.find(v => v.lang === 'th-TH' || v.lang === 'th')
+  return thaiVoice || null
+}
+
+function speakWithVoice(text, lang, onEnd) {
+  const utter = new SpeechSynthesisUtterance(text)
+  utter.lang = lang
+  utter.rate = 0.9
+  utter.pitch = 1.0
+  utter.volume = 1
+  // ถ้าเป็นภาษาไทย พยายามหา voice ตรงๆ
+  if (lang === 'th-TH') {
+    const thaiVoice = getThaiVoice()
+    if (thaiVoice) utter.voice = thaiVoice
+  }
+  if (onEnd) utter.onend = onEnd
+  window.speechSynthesis.speak(utter)
+  return utter
+}
+
 function speakText(name, amount, msg) {
   const ttsOn = document.getElementById('cfg-tts')?.checked !== false
   if (!ttsOn || !('speechSynthesis' in window)) return
   window.speechSynthesis.cancel()
-  // อ่านชื่อ + จำนวน
-  const announce = new SpeechSynthesisUtterance(`${name} donate ${amount} บาท`)
-  announce.lang = 'th-TH'
-  announce.rate = 0.95
-  announce.pitch = 1.1
-  announce.volume = 1
-  window.speechSynthesis.speak(announce)
-  // อ่านข้อความ (ถ้ามี) หลังจากประกาศชื่อ
-  if (msg && msg.trim()) {
-    announce.onend = () => {
-      setTimeout(() => {
-        const msgUtter = new SpeechSynthesisUtterance(msg)
-        // ตรวจภาษาอัตโนมัติ
-        const langAuto = document.getElementById('cfg-lang')?.checked !== false
-        if (langAuto) {
-          const isThai = /[\u0E00-\u0E7F]/.test(msg)
-          msgUtter.lang = isThai ? 'th-TH' : 'en-US'
-        } else {
-          msgUtter.lang = 'th-TH'
-        }
-        msgUtter.rate = 0.9
-        msgUtter.volume = 1
-        window.speechSynthesis.speak(msgUtter)
-      }, 300)
+
+  const doSpeak = () => {
+    // อ่านชื่อ + จำนวนเป็นภาษาไทยก่อน
+    speakWithVoice(`${name} donate ${amount} บาท`, 'th-TH', () => {
+      // จบแล้วค่อยอ่านข้อความ
+      if (msg && msg.trim()) {
+        setTimeout(() => {
+          const langAuto = document.getElementById('cfg-lang')?.checked !== false
+          let lang = 'th-TH'
+          if (langAuto) {
+            const isThai = /[\u0E00-\u0E7F]/.test(msg)
+            const isEng = /^[a-zA-Z0-9\s.,!?'"]+$/.test(msg.trim())
+            lang = isThai ? 'th-TH' : (isEng ? 'en-US' : 'th-TH')
+          }
+          speakWithVoice(msg, lang, null)
+        }, 200)
+      }
+    })
+  }
+
+  // รอให้ voices โหลดก่อน (สำคัญมากสำหรับ Chrome)
+  const voices = window.speechSynthesis.getVoices()
+  if (voices.length > 0) {
+    doSpeak()
+  } else {
+    window.speechSynthesis.onvoiceschanged = () => {
+      window.speechSynthesis.onvoiceschanged = null
+      doSpeak()
     }
+    // fallback ถ้า event ไม่ trigger
+    setTimeout(doSpeak, 500)
   }
 }
 
