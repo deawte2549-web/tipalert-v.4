@@ -6,540 +6,248 @@
 <title>Donate — TipAlert</title>
 <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
 <style>
-:root {
-  --bg: #0C0C10;
-  --surface: #13131A;
-  --surface2: #1A1A24;
-  --border: rgba(255,255,255,0.07);
-  --accent: #7C3AED;
-  --accent2: #A855F7;
-  --green: #10B981;
-  --text: #F1F0FF;
-  --muted: rgba(241,240,255,0.45);
-  --font: 'Prompt', sans-serif;
-  --mono: 'Space Mono', monospace;
-}
-* { margin:0; padding:0; box-sizing:border-box; }
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--font);
-  min-height: 100vh;
-}
-
-/* BG Effect */
-.bg-glow {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(124,58,237,0.15) 0%, transparent 70%);
-  z-index: 0;
-}
-
-.wrap {
-  max-width: 480px;
-  margin: 0 auto;
-  padding: 24px 20px 60px;
-  position: relative;
-  z-index: 1;
-}
-
-/* HEADER */
-.header {
-  text-align: center;
-  padding: 32px 0 28px;
-}
-.avatar {
-  width: 88px;
-  height: 88px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--accent), #EC4899);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 40px;
-  margin: 0 auto 16px;
-  box-shadow: 0 8px 32px rgba(124,58,237,0.4);
-  animation: float 3s ease-in-out infinite;
-}
-@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
-.streamer-name { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; }
-.streamer-bio { font-size: 13px; color: var(--muted); margin-top: 6px; }
-.platform-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid var(--border);
-  border-radius: 99px;
-  padding: 5px 12px;
-  font-size: 11px;
-  color: var(--muted);
-  margin-top: 10px;
-}
-
-/* CARD */
-.card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 24px;
-  margin-bottom: 16px;
-}
-
-/* AMOUNT GRID */
-.amount-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-  margin-bottom: 14px;
-}
-.amount-btn {
-  background: var(--surface2);
-  border: 1.5px solid var(--border);
-  border-radius: 14px;
-  padding: 14px 8px;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.2s;
-  font-family: var(--font);
-}
-.amount-btn:hover { border-color: var(--accent2); background: rgba(124,58,237,0.1); }
-.amount-btn.selected {
-  border-color: var(--accent2);
-  background: rgba(124,58,237,0.2);
-  box-shadow: 0 0 12px rgba(124,58,237,0.2);
-}
-.amount-thb { font-size: 17px; font-weight: 700; font-family: var(--mono); color: var(--text); }
-.amount-label { font-size: 10px; color: var(--muted); margin-top: 3px; }
-
-/* FORM */
-.form-label {
-  font-size: 11px;
-  color: var(--muted);
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  margin-bottom: 8px;
-  display: block;
-}
-.form-input {
-  width: 100%;
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 12px 14px;
-  color: var(--text);
-  font-family: var(--font);
-  font-size: 14px;
-  outline: none;
-  transition: border-color 0.2s;
-  margin-bottom: 14px;
-}
-.form-input:focus { border-color: var(--accent); }
-.form-input::placeholder { color: rgba(255,255,255,0.2); }
-textarea.form-input { resize: none; }
-.char-count { font-size: 10px; color: var(--muted); text-align: right; margin-top: -10px; margin-bottom: 14px; }
-
-/* PAYMENT METHODS */
-.payment-option {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 14px;
-  background: var(--surface2);
-  border: 1.5px solid var(--border);
-  border-radius: 14px;
-  cursor: pointer;
-  transition: all 0.2s;
-  margin-bottom: 10px;
-}
-.payment-option:hover { border-color: rgba(124,58,237,0.4); }
-.payment-option.selected {
-  border-color: var(--accent2);
-  background: rgba(124,58,237,0.12);
-}
-.payment-icon { font-size: 28px; width: 40px; text-align: center; flex-shrink: 0; }
-.payment-name { font-size: 14px; font-weight: 600; }
-.payment-info { font-size: 11px; color: var(--muted); margin-top: 2px; font-family: var(--mono); }
-.payment-check {
-  margin-left: auto;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  border: 2px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  transition: all 0.2s;
-  flex-shrink: 0;
-}
-.payment-option.selected .payment-check {
-  background: var(--accent);
-  border-color: var(--accent);
-}
-
-/* SUBMIT BTN */
-.submit-btn {
-  width: 100%;
-  padding: 16px;
-  background: linear-gradient(135deg, var(--accent), #EC4899);
-  border: none;
-  border-radius: 16px;
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: 700;
-  color: #fff;
-  font-family: var(--font);
-  letter-spacing: -0.3px;
-  box-shadow: 0 6px 28px rgba(124,58,237,0.4);
-  transition: all 0.3s;
-  position: relative;
-  overflow: hidden;
-}
-.submit-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 36px rgba(124,58,237,0.5); }
-.submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
-
-/* QR MODAL */
-.overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.85);
-  z-index: 100;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-}
-.overlay.show { display: flex; }
-.modal {
-  background: var(--surface);
-  border: 1px solid rgba(124,58,237,0.3);
-  border-radius: 24px;
-  padding: 32px;
-  width: 100%;
-  max-width: 380px;
-  text-align: center;
-  animation: popIn 0.3s ease;
-}
-@keyframes popIn { from{transform:scale(0.85);opacity:0} to{transform:scale(1);opacity:1} }
-.modal-title { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
-.modal-sub { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
-
-/* QR Code box */
-.qr-box {
-  background: #fff;
-  border-radius: 16px;
-  padding: 20px;
-  margin: 0 auto 20px;
-  width: 200px;
-  height: 200px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 13px;
-  color: #333;
-  position: relative;
-}
-.qr-placeholder {
-  display: grid;
-  grid-template-columns: repeat(5,1fr);
-  gap: 3px;
-  width: 100%;
-}
-.qr-cell {
-  height: 20px;
-  border-radius: 2px;
-}
-
-.amount-display {
-  font-size: 36px;
-  font-weight: 800;
-  font-family: var(--mono);
-  background: linear-gradient(135deg, var(--accent2), #EC4899);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin-bottom: 4px;
-}
-.bank-detail {
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 14px;
-  margin-bottom: 16px;
-  text-align: left;
-}
-.bank-detail-row {
-  display: flex;
-  justify-content: space-between;
-  font-size: 13px;
-  padding: 5px 0;
-  border-bottom: 1px solid var(--border);
-}
-.bank-detail-row:last-child { border-bottom: none; }
-.bank-detail-row .key { color: var(--muted); }
-.bank-detail-row .val { font-weight: 600; font-family: var(--mono); font-size: 12px; }
-
-.confirm-btn {
-  width: 100%;
-  padding: 14px;
-  background: var(--green);
-  border: none;
-  border-radius: 14px;
-  cursor: pointer;
-  font-size: 15px;
-  font-weight: 700;
-  color: #fff;
-  font-family: var(--font);
-  transition: all 0.2s;
-  margin-bottom: 10px;
-}
-.cancel-btn {
-  width: 100%;
-  padding: 11px;
-  background: transparent;
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  cursor: pointer;
-  font-size: 13px;
-  color: var(--muted);
-  font-family: var(--font);
-}
-
-/* SUCCESS */
-.success-screen {
-  display: none;
-  text-align: center;
-  padding: 40px 0;
-}
-.success-screen.show { display: block; animation: popIn 0.5s ease; }
-.success-emoji { font-size: 72px; animation: bounce 0.6s ease; margin-bottom: 16px; }
-@keyframes bounce { 0%{transform:scale(0)} 60%{transform:scale(1.2)} 100%{transform:scale(1)} }
-
-/* FOOTER */
-.footer {
-  text-align: center;
-  font-size: 11px;
-  color: rgba(255,255,255,0.2);
-  margin-top: 24px;
-}
-
-/* MIN BADGE */
-.min-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  background: rgba(245,158,11,0.1);
-  border: 1px solid rgba(245,158,11,0.2);
-  border-radius: 99px;
-  padding: 4px 10px;
-  font-size: 11px;
-  color: #F59E0B;
-  margin-bottom: 14px;
-}
+:root{--bg:#0C0C10;--surface:#13131A;--surface2:#1A1A24;--border:rgba(255,255,255,0.07);--accent:#7C3AED;--accent2:#A855F7;--green:#10B981;--red:#EF4444;--yellow:#F59E0B;--text:#F1F0FF;--muted:rgba(241,240,255,0.45);--font:'Prompt',sans-serif;--mono:'Space Mono',monospace;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;}
+.bg-glow{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 50% 0%,rgba(124,58,237,0.15) 0%,transparent 70%);z-index:0;}
+.wrap{max-width:480px;margin:0 auto;padding:24px 20px 60px;position:relative;z-index:1;}
+.header{text-align:center;padding:28px 0 22px;}
+.avatar{width:84px;height:84px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#EC4899);display:flex;align-items:center;justify-content:center;font-size:36px;margin:0 auto 14px;box-shadow:0 8px 32px rgba(124,58,237,0.4);animation:float 3s ease-in-out infinite;}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.streamer-name{font-size:24px;font-weight:800;letter-spacing:-0.5px;}
+.streamer-bio{font-size:13px;color:var(--muted);margin-top:6px;line-height:1.5;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:22px;margin-bottom:14px;}
+.amount-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:12px;}
+.amt-btn{background:var(--surface2);border:1.5px solid var(--border);border-radius:13px;padding:13px 7px;text-align:center;cursor:pointer;transition:all 0.2s;font-family:var(--font);}
+.amt-btn:hover{border-color:var(--accent2);background:rgba(124,58,237,0.1);}
+.amt-btn.selected{border-color:var(--accent2);background:rgba(124,58,237,0.2);box-shadow:0 0 12px rgba(124,58,237,0.2);}
+.amt-thb{font-size:16px;font-weight:700;font-family:var(--mono);}
+.form-label{font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:7px;display:block;}
+.form-input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:12px 14px;color:var(--text);font-family:var(--font);font-size:14px;outline:none;transition:border-color 0.2s;margin-bottom:13px;}
+.form-input:focus{border-color:var(--accent);}
+.form-input::placeholder{color:rgba(255,255,255,0.2);}
+textarea.form-input{resize:none;}
+.char-count{font-size:10px;color:var(--muted);text-align:right;margin-top:-9px;margin-bottom:13px;}
+.pay-opt{display:flex;align-items:center;gap:13px;padding:13px;background:var(--surface2);border:1.5px solid var(--border);border-radius:13px;cursor:pointer;transition:all 0.2s;margin-bottom:9px;}
+.pay-opt:hover{border-color:rgba(124,58,237,0.4);}
+.pay-opt.selected{border-color:var(--accent2);background:rgba(124,58,237,0.12);}
+.pay-check{margin-left:auto;width:21px;height:21px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;transition:all 0.2s;flex-shrink:0;}
+.pay-opt.selected .pay-check{background:var(--accent);border-color:var(--accent);}
+.submit-btn{width:100%;padding:15px;background:linear-gradient(135deg,var(--accent),#EC4899);border:none;border-radius:16px;cursor:pointer;font-size:15px;font-weight:700;color:#fff;font-family:var(--font);box-shadow:0 6px 28px rgba(124,58,237,0.4);transition:all 0.3s;}
+.submit-btn:hover{transform:translateY(-2px);box-shadow:0 10px 36px rgba(124,58,237,0.5);}
+.submit-btn:disabled{opacity:0.6;cursor:not-allowed;transform:none;}
+.min-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.2);border-radius:99px;padding:4px 10px;font-size:11px;color:var(--yellow);}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:100;align-items:center;justify-content:center;padding:20px;}
+.overlay.show{display:flex;}
+.modal{background:var(--surface);border:1px solid rgba(124,58,237,0.3);border-radius:24px;padding:28px;width:100%;max-width:380px;text-align:center;animation:popIn 0.3s ease;}
+@keyframes popIn{from{transform:scale(0.85);opacity:0}to{transform:scale(1);opacity:1}}
+.bank-detail{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:16px;text-align:left;}
+.bank-row{display:flex;justify-content:space-between;font-size:13px;padding:5px 0;border-bottom:1px solid var(--border);}
+.bank-row:last-child{border-bottom:none;}
+.bank-row .key{color:var(--muted);}
+.bank-row .val{font-weight:600;font-family:var(--mono);font-size:12px;}
+.amount-display{font-size:34px;font-weight:800;font-family:var(--mono);background:linear-gradient(135deg,var(--accent2),#EC4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px;}
+.confirm-btn{width:100%;padding:13px;background:var(--green);border:none;border-radius:13px;cursor:pointer;font-size:14px;font-weight:700;color:#fff;font-family:var(--font);margin-bottom:9px;}
+.cancel-btn{width:100%;padding:10px;background:transparent;border:1px solid var(--border);border-radius:13px;cursor:pointer;font-size:13px;color:var(--muted);font-family:var(--font);}
+.success-screen{display:none;text-align:center;padding:36px 0;}
+.success-screen.show{display:block;animation:popIn 0.5s ease;}
+.loading-screen{text-align:center;padding:60px 0;color:var(--muted);}
+.footer{text-align:center;font-size:11px;color:rgba(255,255,255,0.2);margin-top:20px;}
+.error-screen{text-align:center;padding:60px 20px;color:var(--muted);}
 </style>
 </head>
 <body>
 <div class="bg-glow"></div>
-
 <div class="wrap">
-  <!-- Header -->
-  <div class="header">
-    <div class="avatar" id="streamer-avatar">🎮</div>
-    <div class="streamer-name" id="streamer-name">Loading...</div>
-    <div class="streamer-bio" id="streamer-bio"></div>
-    <div class="platform-badge" id="platform-badge">🎥 Streamer</div>
+
+  <!-- Loading -->
+  <div id="loading-screen" class="loading-screen">
+    <div style="font-size:48px;margin-bottom:16px;animation:float 2s ease-in-out infinite;">🎙️</div>
+    <div style="font-size:14px;">กำลังโหลด...</div>
   </div>
 
-  <!-- Main form -->
-  <div id="donate-form">
+  <!-- Error -->
+  <div id="error-screen" class="error-screen" style="display:none;">
+    <div style="font-size:48px;margin-bottom:16px;">😢</div>
+    <div style="font-size:16px;font-weight:600;margin-bottom:8px;">ไม่พบ Streamer</div>
+    <div style="font-size:13px;">ลิงก์นี้อาจไม่ถูกต้อง หรือ Streamer ได้ลบบัญชีแล้ว</div>
+  </div>
+
+  <!-- Main donate form -->
+  <div id="donate-form" style="display:none;">
+    <div class="header">
+      <div class="avatar" id="avatar-emoji">🎮</div>
+      <div class="streamer-name" id="streamer-name">Loading...</div>
+      <div class="streamer-bio" id="streamer-bio"></div>
+    </div>
+
     <!-- Amount -->
     <div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
-        <div style="font-size:14px;font-weight:600;">เลือกจำนวนเงิน 💸</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:13px;">
+        <div style="font-size:13px;font-weight:600;">เลือกจำนวนเงิน 💸</div>
         <div class="min-badge" id="min-badge">⚡ ขั้นต่ำ ฿20</div>
       </div>
-      <div class="amount-grid" id="amount-grid">
-        <div class="amount-btn selected" onclick="selectAmt(this,20)">
-          <div class="amount-thb">฿20</div>
-        </div>
-        <div class="amount-btn" onclick="selectAmt(this,50)">
-          <div class="amount-thb">฿50</div>
-        </div>
-        <div class="amount-btn" onclick="selectAmt(this,100)">
-          <div class="amount-thb">฿100</div>
-        </div>
-        <div class="amount-btn" onclick="selectAmt(this,200)">
-          <div class="amount-thb">฿200</div>
-        </div>
-        <div class="amount-btn" onclick="selectAmt(this,500)">
-          <div class="amount-thb">฿500</div>
-        </div>
-        <div class="amount-btn" onclick="selectAmt(this,1000)">
-          <div class="amount-thb">฿1K</div>
-        </div>
-        <div class="amount-btn" onclick="selectAmt(this,2000)">
-          <div class="amount-thb">฿2K</div>
-        </div>
-        <div class="amount-btn" onclick="selectAmt(this,0)" id="custom-btn">
-          <div class="amount-thb" style="font-size:13px;">กำหนด</div>
-        </div>
-      </div>
-      <div id="custom-input-wrap" style="display:none;">
-        <label class="form-label">จำนวนเงิน (บาท)</label>
-        <input class="form-input" type="number" id="custom-amount" placeholder="พิมจำนวนเงิน..." min="20" oninput="updateCustomAmount(this.value)"/>
+      <div class="amount-grid" id="amount-grid"></div>
+      <div id="custom-wrap" style="display:none;">
+        <label class="form-label">พิมจำนวนเงิน (บาท)</label>
+        <input class="form-input" type="number" id="custom-amount" placeholder="พิมจำนวน..." min="1" oninput="onCustomAmount(this.value)"/>
       </div>
     </div>
 
     <!-- Message + Name -->
     <div class="card">
       <label class="form-label">ข้อความถึง Streamer 💬</label>
-      <textarea class="form-input" id="msg" rows="3" placeholder="พิมข้อความที่อยากให้อ่านออกอากาศ..." maxlength="150" oninput="updateChar(this)"></textarea>
+      <textarea class="form-input" id="msg" rows="3" placeholder="พิมข้อความที่อยากให้อ่านออกอากาศ..." maxlength="150" oninput="document.getElementById('char-count').textContent=this.value.length+' / 150'"></textarea>
       <div class="char-count" id="char-count">0 / 150</div>
-
       <label class="form-label">ชื่อของคุณ</label>
       <input class="form-input" type="text" id="donor-name" placeholder="Anonymous (ไม่ระบุชื่อได้)"/>
     </div>
 
     <!-- Payment Methods -->
     <div class="card">
-      <div style="font-size:14px;font-weight:600;margin-bottom:14px;">เลือกช่องทางชำระ 💳</div>
-      <div id="payment-methods">
-        <!-- Loaded dynamically -->
-        <div style="text-align:center;padding:20px;color:var(--muted);font-size:13px;">⏳ Loading...</div>
+      <div style="font-size:13px;font-weight:600;margin-bottom:13px;">เลือกช่องทางชำระ 💳</div>
+      <div id="payment-options">
+        <div style="text-align:center;padding:20px;color:var(--muted);font-size:13px;">⏳ กำลังโหลด...</div>
       </div>
     </div>
 
-    <!-- Submit -->
-    <button class="submit-btn" id="submit-btn" onclick="handleDonate()">
-      💸 Donate เลย!
-    </button>
-    <div class="footer">
-      🔒 ปลอดภัย • Powered by <strong>TipAlert</strong><br/>
-      เราไม่เก็บข้อมูลบัตรเครดิต
-    </div>
+    <button class="submit-btn" id="submit-btn" onclick="handleDonate()">💸 Donate เลย!</button>
+    <div class="footer">🔒 ปลอดภัย • Powered by <strong>TipAlert</strong></div>
   </div>
 
-  <!-- Success screen -->
+  <!-- Success -->
   <div class="success-screen" id="success-screen">
-    <div class="success-emoji">🎉</div>
-    <div style="font-size:24px;font-weight:800;margin-bottom:8px;">ขอบคุณมากๆ!</div>
-    <div style="font-size:14px;color:var(--muted);margin-bottom:32px;">Donation ของคุณถูกส่งไปแล้ว<br/>ข้อความจะขึ้นหน้าจอ stream เดี๋ยวนี้!</div>
-    <div style="background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.25);border-radius:16px;padding:20px;margin-bottom:24px;">
-      <div id="success-amount" style="font-size:36px;font-weight:800;font-family:var(--mono);color:#10B981;"></div>
-      <div id="success-name" style="font-size:14px;color:var(--muted);margin-top:4px;"></div>
-      <div id="success-msg" style="font-size:13px;color:rgba(255,255,255,0.6);margin-top:8px;font-style:italic;"></div>
+    <div style="font-size:72px;animation:float 2s ease-in-out infinite;margin-bottom:16px;">🎉</div>
+    <div style="font-size:22px;font-weight:800;margin-bottom:8px;">ขอบคุณมากๆ!</div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:28px;">Donation ของคุณถูกส่งไปแล้ว!</div>
+    <div style="background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.25);border-radius:16px;padding:20px;margin-bottom:22px;">
+      <div id="success-amount" style="font-size:34px;font-weight:800;font-family:var(--mono);color:#10B981;"></div>
+      <div id="success-name" style="font-size:13px;color:var(--muted);margin-top:4px;"></div>
+      <div id="success-msg" style="font-size:12px;color:rgba(255,255,255,0.6);margin-top:7px;font-style:italic;"></div>
     </div>
-    <button class="submit-btn" onclick="resetForm()" style="max-width:280px;">
-      Donate อีกครั้ง
-    </button>
+    <button class="submit-btn" onclick="resetForm()" style="max-width:260px;">Donate อีกครั้ง</button>
   </div>
 </div>
 
-<!-- PAYMENT MODAL -->
-<div class="overlay" id="payment-modal">
+<!-- Payment Modal -->
+<div class="overlay" id="pay-modal">
   <div class="modal">
-    <div class="modal-title" id="modal-title">PromptPay</div>
-    <div class="modal-sub" id="modal-sub">สแกน QR หรือโอนตามรายละเอียดด้านล่าง</div>
-
+    <div style="font-size:13px;font-weight:700;margin-bottom:4px;" id="modal-title">PromptPay</div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:16px;">โอนเงินตามรายละเอียดด้านล่าง</div>
     <div class="amount-display" id="modal-amount">฿100</div>
-
-    <!-- QR Code (placeholder) -->
-    <div class="qr-box" id="qr-box">
-      <div id="qr-content" style="font-size:12px;color:#333;text-align:center;">
-        <div style="font-size:32px;margin-bottom:8px;">📱</div>
-        QR Code จะแสดงที่นี่<br/>
-        <span style="font-size:10px;color:#666;">(ระบบจริงจะ generate จาก API)</span>
-      </div>
-    </div>
-
-    <!-- Bank Details -->
-    <div class="bank-detail" id="bank-detail">
-      <div class="bank-detail-row">
-        <span class="key">ช่องทาง</span>
-        <span class="val" id="detail-type">-</span>
-      </div>
-      <div class="bank-detail-row">
-        <span class="key">เลขบัญชี/พร้อมเพย์</span>
-        <span class="val" id="detail-number">-</span>
-      </div>
-      <div class="bank-detail-row">
-        <span class="key">ชื่อบัญชี</span>
-        <span class="val" id="detail-name">-</span>
-      </div>
-      <div class="bank-detail-row">
-        <span class="key">จำนวน</span>
-        <span class="val" id="detail-amount">-</span>
-      </div>
-    </div>
-
-    <button class="confirm-btn" onclick="confirmDonate()">
-      ✅ โอนแล้ว ยืนยัน!
-    </button>
-    <button class="cancel-btn" onclick="closePaymentModal()">
-      ยกเลิก
-    </button>
+    <div class="bank-detail" id="bank-detail"></div>
+    <button class="confirm-btn" onclick="confirmDonate()">✅ โอนแล้ว ยืนยัน!</button>
+    <button class="cancel-btn" onclick="document.getElementById('pay-modal').classList.remove('show')">ยกเลิก</button>
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-// ============ STATE ============
-let selectedAmount = 20
+// ใส่ Supabase Key ของคุณตรงนี้
+const SUPABASE_URL = 'https://okznjhisukdndkkauqsa.supabase.co'
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rem5qaGlzdWtkbmRra2F1cXNhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAyMDE3NDcsImV4cCI6MjA5NTc3Nzc0N30.IOxGrKBx2KFcXHlGPlmXa_5jmifmXhieQKKUND6mepw'
+
+const { createClient } = supabase
+const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+
+let streamerProfile = null
+let paymentMethods = []
+let selectedAmount = 0
 let selectedPayment = null
+let minDonation = 20
 
-// Dummy streamer data (in production จะดึงจาก Supabase)
-const streamer = {
-  name: 'Streamer Name',
-  bio: 'ขอบคุณที่ support นะครับ! 🙏',
-  platform: '🎥 YouTube',
-  minAmount: 20,
-  payments: [
-    { id: 1, type: 'promptpay', icon: '📱', label: 'PromptPay', number: '0812345678', name: 'ชื่อ Streamer' },
-    { id: 2, type: 'truemoney', icon: '💛', label: 'TrueMoney Wallet', number: '0812345678', name: 'ชื่อ Streamer' },
-    { id: 3, type: 'bank', icon: '💜', label: 'SCB ไทยพาณิชย์', number: '123-4-56789-0', name: 'ชื่อ Streamer' },
-  ]
+// ====== INIT ======
+window.onload = async () => {
+  const params = new URLSearchParams(window.location.search)
+  const username = params.get('u')
+  if (!username) { showError(); return }
+
+  // ดึงข้อมูล streamer จาก database
+  const { data: profile, error } = await db
+    .from('streamer_profiles')
+    .select('*')
+    .eq('username', username)
+    .single()
+
+  if (error || !profile) { showError(); return }
+  streamerProfile = profile
+  minDonation = profile.min_donation || 20
+
+  // ดึงช่องทางรับเงิน
+  const { data: payments } = await db
+    .from('payment_methods')
+    .select('*')
+    .eq('user_id', profile.id)
+    .eq('is_active', true)
+    .order('sort_order')
+
+  paymentMethods = payments || []
+
+  // แสดงข้อมูล
+  document.getElementById('loading-screen').style.display = 'none'
+  document.getElementById('donate-form').style.display = 'block'
+  document.title = `Donate ให้ ${profile.username} — TipAlert`
+
+  // ชื่อ + bio
+  document.getElementById('streamer-name').textContent = profile.username
+  document.getElementById('streamer-bio').textContent = profile.welcome_msg || 'ขอบคุณที่ support นะครับ!'
+
+  // ขั้นต่ำ
+  document.getElementById('min-badge').textContent = `⚡ ขั้นต่ำ ฿${minDonation}`
+
+  // สร้างปุ่มจำนวนเงินตามขั้นต่ำ
+  buildAmountButtons(minDonation)
+
+  // ช่องทางรับเงิน
+  renderPayments()
 }
 
-// Init
-window.onload = () => {
-  // Load from URL param (/donate/username)
-  const path = window.location.pathname
-  const username = path.split('/').pop() || 'streamer'
+function buildAmountButtons(min) {
+  // สร้าง preset amounts ที่เหมาะสมกับขั้นต่ำ
+  let presets = []
+  if (min <= 20) presets = [20, 50, 100, 200, 500, 1000]
+  else if (min <= 50) presets = [50, 100, 200, 500, 1000, 2000]
+  else if (min <= 100) presets = [100, 200, 500, 1000, 2000, 5000]
+  else presets = [min, min*2, min*5, min*10]
 
-  document.getElementById('streamer-name').textContent = streamer.name
-  document.getElementById('streamer-bio').textContent = streamer.bio
-  document.getElementById('platform-badge').textContent = streamer.platform
-  document.getElementById('min-badge').textContent = `⚡ ขั้นต่ำ ฿${streamer.minAmount}`
-  document.title = `Donate ให้ ${streamer.name} — TipAlert`
+  // เอาแค่ 7 + กำหนดเอง
+  const show = presets.slice(0, 7)
+  const grid = document.getElementById('amount-grid')
+  grid.style.gridTemplateColumns = 'repeat(4,1fr)'
 
-  renderPaymentMethods()
+  grid.innerHTML = show.map((amt, i) => `
+    <div class="amt-btn ${i===0?'selected':''}" onclick="selectAmt(this,${amt})">
+      <div class="amt-thb">฿${amt>=1000?(amt/1000)+'K':amt}</div>
+    </div>`).join('') + `
+    <div class="amt-btn" onclick="selectAmt(this,0)" id="custom-btn">
+      <div class="amt-thb" style="font-size:12px;">กำหนด</div>
+    </div>`
+
+  selectedAmount = show[0]
 }
 
-function renderPaymentMethods() {
-  const container = document.getElementById('payment-methods')
-  if (!streamer.payments || streamer.payments.length === 0) {
-    container.innerHTML = `<div style="text-align:center;padding:20px;color:var(--muted);font-size:13px;">ยังไม่มีช่องทางรับเงิน</div>`
+function renderPayments() {
+  const el = document.getElementById('payment-options')
+  if (paymentMethods.length === 0) {
+    el.innerHTML = `<div style="text-align:center;padding:16px;color:var(--muted);font-size:13px;">ยังไม่มีช่องทางรับเงิน</div>`
     return
   }
-
-  container.innerHTML = streamer.payments.map((p, i) => `
-    <div class="payment-option ${i===0?'selected':''}" onclick="selectPayment(this, ${p.id})" data-id="${p.id}">
-      <div class="payment-icon">${p.icon}</div>
+  el.innerHTML = paymentMethods.map((p, i) => `
+    <div class="pay-opt ${i===0?'selected':''}" onclick="selectPayment(this,'${p.id}')" data-id="${p.id}">
+      <span style="font-size:26px;">${p.icon}</span>
       <div>
-        <div class="payment-name">${p.label}</div>
-        <div class="payment-info">${p.number} • ${p.name}</div>
+        <div style="font-size:13px;font-weight:600;">${p.label}</div>
+        <div style="font-size:11px;color:var(--muted);">${p.account_number} • ${p.account_name}</div>
       </div>
-      <div class="payment-check">${i===0?'✓':''}</div>
+      <div class="pay-check">${i===0?'✓':''}</div>
     </div>`).join('')
-
-  selectedPayment = streamer.payments[0]
+  selectedPayment = paymentMethods[0]
 }
 
 function selectAmt(el, amount) {
-  document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('selected'))
+  document.querySelectorAll('.amt-btn').forEach(b => b.classList.remove('selected'))
   el.classList.add('selected')
-
-  const customWrap = document.getElementById('custom-input-wrap')
+  const customWrap = document.getElementById('custom-wrap')
   if (amount === 0) {
     customWrap.style.display = 'block'
     document.getElementById('custom-amount').focus()
@@ -550,72 +258,60 @@ function selectAmt(el, amount) {
   }
 }
 
-function updateCustomAmount(val) {
-  selectedAmount = parseInt(val) || 0
-}
+function onCustomAmount(val) { selectedAmount = parseInt(val) || 0 }
 
 function selectPayment(el, id) {
-  document.querySelectorAll('.payment-option').forEach(p => {
+  document.querySelectorAll('.pay-opt').forEach(p => {
     p.classList.remove('selected')
-    p.querySelector('.payment-check').textContent = ''
+    p.querySelector('.pay-check').textContent = ''
   })
   el.classList.add('selected')
-  el.querySelector('.payment-check').textContent = '✓'
-  selectedPayment = streamer.payments.find(p => p.id === id)
-}
-
-function updateChar(el) {
-  document.getElementById('char-count').textContent = `${el.value.length} / 150`
+  el.querySelector('.pay-check').textContent = '✓'
+  selectedPayment = paymentMethods.find(p => p.id === id)
 }
 
 function handleDonate() {
   const amount = selectedAmount || parseInt(document.getElementById('custom-amount').value) || 0
-  const min = streamer.minAmount || 20
-
-  if (amount < min) {
-    shake(document.getElementById('submit-btn'))
-    showToast(`❌ ขั้นต่ำ ฿${min}`)
+  if (amount < minDonation) {
+    showToast(`❌ ขั้นต่ำ ฿${minDonation}`)
     return
   }
+  if (!selectedPayment) { showToast('❌ กรุณาเลือกช่องทางชำระ'); return }
 
-  if (!selectedPayment) {
-    showToast('❌ กรุณาเลือกช่องทางชำระ')
-    return
-  }
-
-  // Show payment modal
+  // แสดง modal ยืนยัน
   document.getElementById('modal-title').textContent = `${selectedPayment.icon} ${selectedPayment.label}`
-  document.getElementById('modal-sub').textContent = 'โอนเงินตามรายละเอียดด้านล่าง แล้วกด "โอนแล้ว"'
   document.getElementById('modal-amount').textContent = `฿${amount.toLocaleString()}`
-  document.getElementById('detail-type').textContent = selectedPayment.label
-  document.getElementById('detail-number').textContent = selectedPayment.number
-  document.getElementById('detail-name').textContent = selectedPayment.name
-  document.getElementById('detail-amount').textContent = `฿${amount.toLocaleString()}`
-
-  document.getElementById('payment-modal').classList.add('show')
+  document.getElementById('bank-detail').innerHTML = `
+    <div class="bank-row"><span class="key">ช่องทาง</span><span class="val">${selectedPayment.label}</span></div>
+    <div class="bank-row"><span class="key">เลขบัญชี</span><span class="val">${selectedPayment.account_number}</span></div>
+    <div class="bank-row"><span class="key">ชื่อ</span><span class="val">${selectedPayment.account_name}</span></div>
+    <div class="bank-row"><span class="key">จำนวน</span><span class="val" style="color:#10B981;font-size:15px;">฿${amount.toLocaleString()}</span></div>`
+  document.getElementById('pay-modal').classList.add('show')
 }
 
-function closePaymentModal() {
-  document.getElementById('payment-modal').classList.remove('show')
-}
-
-function confirmDonate() {
+async function confirmDonate() {
   const amount = selectedAmount || parseInt(document.getElementById('custom-amount').value) || 0
-  const msg = document.getElementById('msg').value
-  const name = document.getElementById('donor-name').value || 'Anonymous'
+  const msg = document.getElementById('msg').value.trim()
+  const name = document.getElementById('donor-name').value.trim() || 'Anonymous'
+  document.getElementById('pay-modal').classList.remove('show')
 
-  closePaymentModal()
+  // บันทึกลง database (status = pending รอ streamer ยืนยัน)
+  await db.from('donations').insert({
+    streamer_id: streamerProfile.id,
+    donor_name: name,
+    amount,
+    message: msg,
+    payment_method: selectedPayment?.type || '',
+    status: 'pending',
+    fired_at: new Date().toISOString()
+  })
 
-  // Show success
+  // แสดงหน้า success
   document.getElementById('donate-form').style.display = 'none'
-  const success = document.getElementById('success-screen')
   document.getElementById('success-amount').textContent = `฿${amount.toLocaleString()}`
   document.getElementById('success-name').textContent = `จาก ${name}`
   document.getElementById('success-msg').textContent = msg ? `"${msg}"` : ''
-  success.classList.add('show')
-
-  // ในระบบจริงจะส่ง event ไปที่ backend → WebSocket → alert ขึ้นหน้าจอ streamer
-  // fetch('/api/donation', { method:'POST', body: JSON.stringify({ amount, msg, name, streamer: 'username' }) })
+  document.getElementById('success-screen').classList.add('show')
 }
 
 function resetForm() {
@@ -624,35 +320,29 @@ function resetForm() {
   document.getElementById('msg').value = ''
   document.getElementById('donor-name').value = ''
   document.getElementById('custom-amount').value = ''
-  selectedAmount = 20
-  document.querySelectorAll('.amount-btn').forEach((b,i) => {
-    b.classList.toggle('selected', i === 0)
-  })
+  document.getElementById('char-count').textContent = '0 / 150'
+  buildAmountButtons(minDonation)
+  renderPayments()
 }
 
-function shake(el) {
-  el.style.animation = 'none'
-  el.offsetHeight
-  el.style.animation = 'shake 0.4s ease'
+function showError() {
+  document.getElementById('loading-screen').style.display = 'none'
+  document.getElementById('error-screen').style.display = 'block'
 }
 
-// Toast
 function showToast(msg) {
   let t = document.getElementById('_toast')
   if (!t) {
     t = document.createElement('div')
     t.id = '_toast'
-    t.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1A1A24;border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:12px 20px;font-size:13px;color:#fff;z-index:999;font-family:Prompt,sans-serif;white-space:nowrap;'
+    t.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1A1A24;border:1px solid rgba(239,68,68,0.4);border-radius:12px;padding:11px 18px;font-size:13px;color:#EF4444;z-index:999;font-family:Prompt,sans-serif;white-space:nowrap;'
     document.body.appendChild(t)
   }
-  t.textContent = msg
-  t.style.display = 'block'
+  t.textContent = msg; t.style.display = 'block'
   setTimeout(() => t.style.display = 'none', 2500)
 }
 
-window.onclick = e => {
-  if (e.target.id === 'payment-modal') closePaymentModal()
-}
+window.onclick = e => { if (e.target.id === 'pay-modal') e.target.classList.remove('show') }
 </script>
 </body>
 </html>
