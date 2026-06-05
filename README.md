@@ -1,3 +1,4 @@
+[README.md](https://github.com/user-attachments/files/28624825/README.md)
 # 🎉 TipAlert — คู่มือ Deploy ฉบับสมบูรณ์
 
 ## ไฟล์ที่มีทั้งหมด
